@@ -1,0 +1,134 @@
+標高と気温のデータをもとに、標高と気温の関係を推定し、富士山頂の気温を求めるプログラムをC言語で作成してください。
+条件は以下の通りです。
+
+１．標高と気温のデータは以下に示すdata.csvを使ってください。data.csvの各行には地名、標高(km)、気温(度)が並んでいます。
+data.csv
+Nozawa-onsen,   0.576,  22.3 
+Iiyama,         0.313,  23.3
+Nagano,         0.4182, 23.8
+Oomachi,        0.784,  21.1
+Sugadaira,      1.253,  18.5
+Karuizawa,      0.9991, 19.5
+Matsumoto,      0.610,  23.6
+Nagawa,         1.068,  19.7
+Suwa,           0.760,  22.7
+Nobeyama,       1.350,  18.4
+Ina,            0.633,  22.7
+Nagiso,         0.560,  22.3
+Iida,           0.5164, 23.9
+Minami-shinano, 0.407,  23.5
+
+２．プログラム(mtfuji.c)は以下に示すテンプレートに従ってください。適宜関数やライブラリを追加してください。
+mtfuji.c 
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_LINE 100
+#define MAX_LOCATIONS 50
+
+typedef struct {
+    char *loc;   // location name
+    double alt;  // altitude (km)
+    double temp; // temperature (centigrade)
+} Sample;
+
+int f_dimension()
+{
+    /*
+      ???
+    */
+}
+
+double f_value(const double x[])
+{
+    /*
+      ???
+    */
+}
+
+void f_gradient(const double x[], double g[])
+{
+    /*
+      ???
+    */
+}
+
+int main(){
+    FILE *fp;
+    char line[MAX_LINE];
+    Sample locations[MAX_LOCATIONS]; // 構造体の配列
+    int count = 0;
+
+    if ((fp = fopen("data.csv", "r")) == NULL){
+        fprintf(stderr, "cannot open data.csv\n");
+        exit(EXIT_FAILURE);
+    }
+    
+    // data.csvを読み取って地名、標高、気温を構造体の要素に入れる
+    while (fscanf(fp, "%[^,],%lf,%lf", 
+                locations[count].loc,
+                &locations[count].alt,
+                &locations[count].temp) == 3){
+                    count++;
+                }
+
+    fclose(fp);
+
+    /*これ以降に書いてください*/
+}
+
+３．標高と気温の関係の推定には、最小二乗法を使ってください。
+最小二乗法の説明は以下の通りです。
+最小二乗法による線形回帰はデータセット
+(
+𝑥
+1
+,
+𝑦
+1
+)
+,
+…
+,
+(
+𝑥
+𝑛
+,
+𝑦
+𝑛
+)
+が与えられたときに、二乗誤差の和
+𝐸
+=
+∑
+𝑖
+=
+1
+𝑁
+(
+𝑦
+𝑖
+−
+𝑎
+𝑥
+𝑖
+−
+𝑏
+)
+2
+が最小になるように
+𝑎
+,
+𝑏
+ を設定する問題です。
+
+大まかな手順
+a, b を適当な値で初期化
+与えられた(x, y) と a, bを用いてパラメータa, b に対する勾配を求める
+a, b の値を上記勾配に基づいて最急降下法で更新
+平均二乗誤差が十分小さければ終了
+そうでない場合は2 - 4 を繰り返す
+
+ここでは、ｙが気温のデータ、ｘが標高のデータです。
+
+条件は以上ですが、不明な点があれば、プログラムを作成する前に、何度でも私に尋ねてください。
